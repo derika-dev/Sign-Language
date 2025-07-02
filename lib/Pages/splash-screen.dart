@@ -26,9 +26,9 @@ class SplashScreen extends StatelessWidget {
                 Column(
                   children: [
                     Image.asset(
-                      'assets/images/hallo.png',
-                      width: 120,
-                      height: 120,
+                      'assets/images/2.png',
+                      width: 250,
+                      height:250,
                     ),
                     const SizedBox(height: 16),
                     const Text.rich(
