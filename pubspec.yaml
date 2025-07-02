@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   image_picker: ^1.0.0 # Untuk upload foto dari file/kamera
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:

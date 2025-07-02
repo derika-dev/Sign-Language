@@ -6,13 +6,13 @@
 
         <!-- Tambahkan provider di sini -->
         <provider
-            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
-            android:authorities="${applicationId}.flutter.image_provider"
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/flutter_image_picker_file_paths" />
+                android:resource="@xml/file_paths"/>
         </provider>
 
         <activity
@@ -47,4 +47,5 @@
     </queries>
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 </manifest>

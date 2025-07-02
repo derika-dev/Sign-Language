@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/widgets.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class DashedBorderPainter extends CustomPainter {
   final Color color;
@@ -33,11 +34,6 @@ class DashedBorderPainter extends CustomPainter {
 
     final Path path = Path()..addRRect(rrect);
 
-    double totalLength = path.computeMetrics().fold(
-      0.0,
-      (double prev, PathMetric metric) => prev + metric.length,
-    );
-
     double drawn = 0.0;
     for (final PathMetric metric in path.computeMetrics()) {
       while (drawn < metric.length) {
@@ -64,12 +60,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   XFile? _imageFile;
-  bool _isPicking = false; // Tambahkan flag ini
+  bool _isPicking = false;
 
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage(ImageSource source) async {
-    if (_isPicking) return; // Cegah double tap
+    if (_isPicking) return;
     setState(() {
       _isPicking = true;
     });
@@ -191,78 +187,107 @@ class _HomePageState extends State<HomePage> {
                       dash: 8,
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(
-                        16,
-                      ), // Tambahkan padding di sini
-                      child: Column(
-                        children: [
-                          const Icon(
-                            Icons.image_outlined,
-                            size: 56,
-                            color: Color(0xFFFFC727),
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            "Unggah Foto",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black54,
+                      padding: const EdgeInsets.all(16),
+                      child: _imageFile == null
+                          ? Column(
+                              children: [
+                                const Icon(
+                                  Icons.image_outlined,
+                                  size: 56,
+                                  color: Color(0xFFFFC727),
+                                ),
+                                const SizedBox(height: 12),
+                                const Text(
+                                  "Unggah Foto",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () =>
+                                          _pickImage(ImageSource.gallery),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(
+                                          0xFFFFC727,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 14,
+                                        ),
+                                      ),
+                                      icon: const Icon(
+                                        Icons.insert_drive_file_rounded,
+                                        color: Colors.black,
+                                        size: 28,
+                                      ),
+                                      label: const Text(
+                                        'File',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    ElevatedButton.icon(
+                                      onPressed: () async {
+                                        if (_isPicking) return;
+                                        var status = await Permission.camera
+                                            .request();
+                                        if (!mounted) return;
+                                        if (status.isGranted) {
+                                          _pickImage(ImageSource.camera);
+                                        } else {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Izin kamera diperlukan',
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(
+                                          0xFFFFC727,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 14,
+                                        ),
+                                      ),
+                                      icon: const Icon(
+                                        Icons.camera_alt_rounded,
+                                        color: Colors.black,
+                                        size: 28,
+                                      ),
+                                      label: const Text(
+                                        'Camera',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Center(
+                              child: Image.file(
+                                File(_imageFile!.path),
+                                width: 240,
+                                height: 240,
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton.icon(
-                                onPressed: () =>
-                                    _pickImage(ImageSource.gallery),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFFC727),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 14,
-                                  ),
-                                ),
-                                icon: const Icon(
-                                  Icons.insert_drive_file_rounded,
-                                  color: Colors.black,
-                                  size: 28,
-                                ),
-                                label: const Text(
-                                  'File',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              ElevatedButton.icon(
-                                onPressed: () => _pickImage(ImageSource.camera),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFFC727),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 14,
-                                  ),
-                                ),
-                                icon: const Icon(
-                                  Icons.camera_alt_rounded,
-                                  color: Colors.black,
-                                  size: 28,
-                                ),
-                                label: const Text(
-                                  'Camera',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
@@ -291,15 +316,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                if (_imageFile != null)
-                  Center(
-                    child: Image.file(
-                      File(_imageFile!.path),
-                      width: 240,
-                      height: 240,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
                 const SizedBox(height: 40),
               ],
             ),
