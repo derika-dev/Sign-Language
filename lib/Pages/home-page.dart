@@ -472,46 +472,40 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 6),
                       if (_isLoading)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 24),
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(18),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: Color(0xFFFFC727),
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    SizedBox(
-                                      width: 28,
-                                      height: 28,
-                                      child: CircularProgressIndicator(
-                                        color: Color(0xFFFFC727),
-                                        strokeWidth: 4,
-                                      ),
-                                    ),
-                                    SizedBox(width: 16),
-                                    Text(
-                                      "Sedang memproses...",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Color(0xFFFFC727),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                        SizedBox(
+                          height: 90,
+                          child: Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
                               ),
-                            ],
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: CircularProgressIndicator(
+                                      color: Color(0xFFFFC727),
+                                      strokeWidth: 5,
+                                    ),
+                                  ),
+                                  SizedBox(width: 20),
+                                  Text(
+                                    "Sedang memproses...",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Color(0xFFFFC727),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         )
                       else if (_detections != null && _detections!.isNotEmpty)
@@ -529,66 +523,95 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const Text(
                                   'Hasil Deteksi:',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 22,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFFFFC727),
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 16),
                                 ..._detections!.map(
-                                  (det) => Container(
-                                    margin: const EdgeInsets.only(bottom: 8),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                      horizontal: 12,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFFF8E1),
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: Color(0xFFFFC727),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: Row(
+                                  (det) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 24),
+                                    child: Column(
                                       children: [
-                                        Icon(
-                                          Icons.emoji_objects,
-                                          color: Color(0xFFFFC727),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.emoji_objects,
+                                              color: Color(0xFFFFC727),
+                                              size: 32,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              '${det['label']}',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black87,
+                                                fontSize: 32,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(width: 10),
+                                        const SizedBox(height: 12),
                                         Text(
-                                          'Label: ',
+                                          'Confidence',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFFFFC727),
+                                            fontSize: 16,
                                           ),
                                         ),
-                                        Text(
-                                          '${det['label']}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Text(
-                                          'Confidence: ',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFFFFC727),
-                                          ),
-                                        ),
-                                        Text(
-                                          '${(det['confidence'] * 100).toStringAsFixed(1)}%',
-                                          style: const TextStyle(
-                                            color: Colors.black87,
-                                          ),
+                                        const SizedBox(height: 8),
+                                        // Visual bar confidence
+                                        Stack(
+                                          alignment: Alignment
+                                              .centerLeft, // <-- pastikan alignment kiri
+                                          children: [
+                                            Container(
+                                              width: 180,
+                                              height: 18,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFFFFF8E1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                  color: Color(0xFFFFC727),
+                                                  width: 1,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              width:
+                                                  180 *
+                                                  (det['confidence'] as double),
+                                              height: 18,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFFFFC727),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            Positioned.fill(
+                                              child: Center(
+                                                child: Text(
+                                                  '${(det['confidence'] * 100).toStringAsFixed(1)}%',
+                                                  style: const TextStyle(
+                                                    color: Colors.black87,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
