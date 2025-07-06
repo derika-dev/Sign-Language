@@ -1,4 +1,4 @@
-Hello Me menggunakan model machine learning yang dilatih khusus untuk mendeteksi dan menerjemahkan gerakan tangan bahasa isyarat menjadi huruf alfabet. Model ini diintegrasikan melalui API Hugging Face dan dilatih menggunakan dataset lebih dari 4.300 gambar.
+#Hello Me menggunakan model machine learning yang dilatih khusus untuk mendeteksi dan menerjemahkan gerakan tangan bahasa isyarat menjadi huruf alfabet. Model ini diintegrasikan melalui API Hugging Face dan dilatih menggunakan dataset lebih dari 4.300 gambar.
 
 🔗 Hugging Face Space (API)
 Model ini di-host di Hugging Face Spaces:
