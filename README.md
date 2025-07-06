@@ -12,8 +12,9 @@ Total gambar: ±4.300
 ±1.700 gambar dari dataset publik
 
 ±2.600 gambar merupakan anotasi manual oleh tim pengembang
-**
-📓 Notebook Pelatihan di Google Colab**
+
+**📓 Notebook Pelatihan di Google Colab**
+
 📌 Model Training Awal:
 Notebook Colab 1
 
